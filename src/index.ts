@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 // Endpoint untuk Registrasi User
-app.post('/api/register', async (req, res) => {
+app.post('/api/users', async (req, res) => {
   try {
     const { name, email, password } = req.body;
     
