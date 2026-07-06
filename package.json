@@ -5,12 +5,12 @@
   "main": "src/index.ts",
   "type": "commonjs",
   "scripts": {
-  "start": "npx prisma generate && npx tsx src/index.ts",
-  "dev": "tsx src/index.ts",
-  "migrate": "prisma migrate dev --name skema_akhir_pkl",
-  "seed": "node prisma/seed.js",
-  "build": "echo 'Skipping build'"
-},
+    "start": "npx prisma generate && npx tsx src/index.ts",
+    "dev": "tsx src/index.ts",
+    "migrate": "prisma migrate dev --name skema_akhir_pkl",
+    "seed": "node prisma/seed.js",
+    "build": "echo 'Skipping build'"
+  },
   "engines": {
     "node": "22.x"
   },
@@ -29,7 +29,7 @@
   "devDependencies": {
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0",
-    "typescript": "^6.0.3",
-    "tsx": "^4.23.0"
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3"
   }
 }
