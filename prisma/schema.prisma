@@ -4,45 +4,47 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  engineType = "library" // <-- Tambahkan baris ini!
+  provider   = "prisma-client-js"
+  engineType = "library"
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
-  name        String
-  email       String     @unique
-  password    String
-  role        String     @default("SISWA") // "SISWA" atau "GURU"
+  id                Int       @id @default(autoincrement())
+  name              String
+  email             String    @unique
+  password          String
+  role              String    @default("SISWA")
   
-  // Fitur Setting Akun Siswa
-  birthDate   DateTime?
-  avatar      String?    // Untuk menyimpan nama file foto profil
+  // Data Profil
+  birthDate         DateTime?
+  avatar            String?
   
-  // Fitur Lokasi Magang (Untuk Absensi & Monitoring Guru)
-  latitude    Float?     // Contoh: -6.9823
-  longitude   Float?     // Contoh: 110.2341
+  // Data Magang (Sesuai dengan payload Flutter kamu)
+  guru_uid          String?   // Ditambahkan agar sinkron dengan payload
+  pkl_place_name    String?   // Sesuai payload
+  pkl_place_address String?   // Sesuai payload
+  latitude          Float?    @map("pkl_lat") // Mapping ke nama di payload
+  longitude         Float?    @map("pkl_lng") // Mapping ke nama di payload
   
-  // Relasi
-  presensi    Presensi[]
-  logbooks    Logbook[]
-  createdAt   DateTime   @default(now())
+  presensi          Presensi[]
+  logbooks          Logbook[]
+  createdAt         DateTime  @default(now())
 }
 
 model Presensi {
-  id         Int      @id @default(autoincrement())
-  date       DateTime @default(now())
-  status     String   // "HADIR", "IZIN", "SAKIT"
-  isValid    Boolean  @default(true) // Valid jika sesuai lokasi & waktu
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  date      DateTime @default(now())
+  status    String   
+  isValid   Boolean  @default(true)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Logbook {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @default(now())
-  activity    String   @db.Text
-  status      String   @default("PENDING") // "PENDING", "ACC", "TOLAK"
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  date      DateTime @default(now())
+  activity  String   @db.Text
+  status    String   @default("PENDING")
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }

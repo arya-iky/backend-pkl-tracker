@@ -17,15 +17,19 @@ app.get('/', (req, res) => {
 // Endpoint untuk Registrasi User
 app.post('/api/users', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body; // Pastikan 'name' ada di sini
     
     const newUser = await prisma.user.create({
-      data: { name, email, password },
+      data: { 
+        name: name,     // Pastikan ini terisi
+        email: email, 
+        password: password 
+      },
     });
     
-    res.status(201).json({ message: "User berhasil dibuat", user: newUser });
+    res.status(201).json(newUser);
   } catch (error) {
-    console.error(error);
+    console.error("DETAIL ERROR:", error);
     res.status(500).json({ error: "Gagal mendaftar" });
   }
 });
