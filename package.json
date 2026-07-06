@@ -1,0 +1,35 @@
+{
+  "name": "pkl_tracker_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+  "start": "npx prisma generate && npx tsx src/index.ts",
+  "dev": "tsx src/index.ts",
+  "migrate": "prisma migrate dev --name skema_akhir_pkl",
+  "seed": "node prisma/seed.js",
+  "build": "echo 'Skipping build'"
+},
+  "engines": {
+    "node": "22.x"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prisma": "^7.8.0",
+    "typescript": "^6.0.3",
+    "tsx": "^4.23.0"
+  }
+}

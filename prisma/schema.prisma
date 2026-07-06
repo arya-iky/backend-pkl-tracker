@@ -1,0 +1,47 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library" // <-- Tambahkan baris ini!
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  name        String
+  email       String     @unique
+  password    String
+  role        String     @default("SISWA") // "SISWA" atau "GURU"
+  
+  // Fitur Setting Akun Siswa
+  birthDate   DateTime?
+  avatar      String?    // Untuk menyimpan nama file foto profil
+  
+  // Fitur Lokasi Magang (Untuk Absensi & Monitoring Guru)
+  latitude    Float?     // Contoh: -6.9823
+  longitude   Float?     // Contoh: 110.2341
+  
+  // Relasi
+  presensi    Presensi[]
+  logbooks    Logbook[]
+  createdAt   DateTime   @default(now())
+}
+
+model Presensi {
+  id         Int      @id @default(autoincrement())
+  date       DateTime @default(now())
+  status     String   // "HADIR", "IZIN", "SAKIT"
+  isValid    Boolean  @default(true) // Valid jika sesuai lokasi & waktu
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Logbook {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @default(now())
+  activity    String   @db.Text
+  status      String   @default("PENDING") // "PENDING", "ACC", "TOLAK"
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+}
