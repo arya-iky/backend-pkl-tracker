@@ -4,33 +4,43 @@ import { PrismaClient } from '@prisma/client';
 
 const app = express();
 const prisma = new PrismaClient();
-const port = process.env.PORT || 8080; // Railway biasanya pakai 8080
+const port = process.env.PORT || 8080;
 
-// Middleware wajib biar bisa terima data JSON dan akses dari frontend
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Backend PKL Tracker sudah jalan!');
-});
-
-// Endpoint untuk Registrasi User
+// Endpoint Registrasi yang sudah ter-update
 app.post('/api/users', async (req, res) => {
   try {
-    const { name, email, password } = req.body; // Pastikan 'name' ada di sini
+    // req.body sekarang akan berisi semua data dari Flutter:
+    // name, email, password, guru_uid, pkl_place_name, 
+    // pkl_place_address, pkl_lat, pkl_lng
     
     const newUser = await prisma.user.create({
-      data: { 
-        name: name,     // Pastikan ini terisi
-        email: email, 
-        password: password 
+      data: {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        role: req.body.role || "SISWA", // Default ke SISWA
+        guru_uid: req.body.guru_uid,
+        pkl_place_name: req.body.pkl_place_name,
+        pkl_place_address: req.body.pkl_place_address,
+        latitude: parseFloat(req.body.pkl_lat), // Konversi ke Float
+        longitude: parseFloat(req.body.pkl_lng), // Konversi ke Float
       },
     });
-    
-    res.status(201).json(newUser);
-  } catch (error) {
+
+    res.status(201).json({ message: "User berhasil dibuat", user: newUser });
+  } catch (error: any) {
     console.error("DETAIL ERROR:", error);
-    res.status(500).json({ error: "Gagal mendaftar" });
+    
+    // Memberikan pesan error yang jelas jika email sudah terdaftar
+    if (error.code === 'P2002') {
+      return res.status(400).json({ error: "Email sudah terdaftar!" });
+    }
+    
+    res.status(500).json({ error: "Gagal menyimpan ke database" });
   }
 });
 
